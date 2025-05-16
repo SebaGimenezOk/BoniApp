@@ -1,0 +1,26 @@
+# Ignorar archivos pesados o innecesarios
+node_modules
+.expo
+.expo-shared
+.vscode
+.idea
+.DS_Store
+*.log
+*.env
+*.sqlite
+*.db
+*.bak
+*.tar
+*.zip
+
+# Ignorar carpetas del sistema/macOS
+**/Library/
+**/MobileSync/
+**/Application Support/
+Library/
+MobileSync/
+Application Support/
+
+# Cualquier otra cosa fuera del proyecto
+/Users/sebagimenez/Library/
+

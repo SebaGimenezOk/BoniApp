@@ -1,0 +1,14 @@
+{
+  "nodeModulesPaths": ["."],
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "f12b3fcf-b32a-4de1-947b-294d07d026b2"
+      }
+    },
+    "owner": "sebadevok",
+    "android": {
+      "package": "com.sebadevok.boniapp"
+    }
+  }
+}
