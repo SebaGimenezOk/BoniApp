@@ -1,70 +1,43 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
-import { Audio } from 'expo-av';
-import { StatusBar } from 'expo-status-bar';
+import React from 'react';
 
-const STREAM_URL = 'https://radiostreamingserver.com.ar/proxy/bonami/stream?type=.mp3'
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
+import HomeScreen from './screens/HomeScreen';
+import CalendarScreen from './screens/CalendarScreen';
+import EventsScreen from './screens/EventsScreen';
+import RadioScreen from './screens/RadioScreen';
+
+
+
+
+
+const Tab = createBottomTabNavigator();
 
 export default function App() {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const sound = useRef(new Audio.Sound());
-
-  useEffect(() => {
-    Audio.setAudioModeAsync({
-      allowsRecordingIOS: false,
-      staysActiveInBackground: true,
-      playsInSilentModeIOS: true,
-      interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
-      interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
-      shouldDuckAndroid: true,
-    });
-
-    return () => {
-      sound.current && sound.current.unloadAsync();
-    };
-  }, []);
-
-  const togglePlay = async () => {
-    if (isPlaying) {
-      await sound.current.pauseAsync();
-      setIsPlaying(false);
-    } else {
-      try {
-        await sound.current.unloadAsync();
-        await sound.current.loadAsync(
-          { uri: STREAM_URL },
-          { shouldPlay: true }
-        );
-        setIsPlaying(true);
-      } catch (error) {
-        console.error('Error al reproducir:', error);
-      }
-    }
-  };
-
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Bonami Radio</Text>
-      <Button
-        title={isPlaying ? '⏸️ Pausar' : '▶️ Reproducir'}
-        onPress={togglePlay}
-      />
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ color, size }) => {
+            let iconName;
+            if (route.name === 'Inicio') iconName = 'home';
+            if (route.name === 'Calendario') iconName = 'calendar';
+            if (route.name === 'Eventos') iconName = 'ticket';
+            if (route.name === 'Radio') iconName = 'play-circle';
+
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: '#1DB954',
+          tabBarInactiveTintColor: 'gray',
+          headerShown: false,
+        })}
+      >
+        <Tab.Screen name="Inicio" component={HomeScreen} />
+        <Tab.Screen name="Calendario" component={CalendarScreen} />
+        <Tab.Screen name="Eventos" component={EventsScreen} />
+        <Tab.Screen name="Radio" component={RadioScreen} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#111',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    color: '#fff',
-    fontSize: 26,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-});
