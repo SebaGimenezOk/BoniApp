@@ -1,22 +1,27 @@
 import React from 'react';
-
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+
 import HomeScreen from './screens/HomeScreen';
 import CalendarScreen from './screens/CalendarScreen';
 import EventsScreen from './screens/EventsScreen';
 import RadioScreen from './screens/RadioScreen';
 
-
-
-
-
 const Tab = createBottomTabNavigator();
+
+// Tema con fondo oscuro para toda la navegación
+const MyTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: '#0D1F2D',
+  },
+};
 
 export default function App() {
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={MyTheme}>
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ color, size }) => {
@@ -31,6 +36,9 @@ export default function App() {
           tabBarActiveTintColor: '#1DB954',
           tabBarInactiveTintColor: 'gray',
           headerShown: false,
+          tabBarStyle: {
+            backgroundColor: '#1d2e3d',
+          },
         })}
       >
         <Tab.Screen name="Inicio" component={HomeScreen} />

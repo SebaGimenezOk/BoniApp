@@ -10,7 +10,7 @@ import Slider from '@react-native-community/slider';
 import { Audio } from 'expo-av';
 import { AntDesign, Entypo } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import muestrapic from '../assets/favicon.png';
+import muestrapic from '../assets/2blanco250.png';
 
 export default function RadioScreen() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -108,9 +108,10 @@ export default function RadioScreen() {
       <Image
         source={muestrapic}
         style={styles.coverImage}
+        resizeMode="contain"
       />
-      <Text style={styles.title}>Bonami Retro Radio</Text>
-      <Text style={styles.subtitle}>🎶 En vivo - DJ Set</Text>
+      {/* <Text style={styles.title}>Bonami Radio</Text> */}
+      {/* <Text style={styles.subtitle}> 🎶 En vivo</Text> */}
 
       {title && <Text style={styles.metadataText}>🎵 {title}</Text>}
       {artist && <Text style={styles.metadataText}>👤 {artist}</Text>}
@@ -155,12 +156,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   coverImage: {
-    width: 90,
-    height: 90,
+    width: 200,
+    height: 200,
     borderRadius: 20,
-    marginBottom: 16,
-    borderWidth: 2,
-    borderColor: '#1DB954',
+    marginBottom: 6,
+ 
   },
   title: {
     color: '#fff',
@@ -201,6 +201,6 @@ const styles = StyleSheet.create({
   },
   volumeText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 10,
   },
 });

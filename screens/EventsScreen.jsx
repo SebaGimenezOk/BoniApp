@@ -1,4 +1,3 @@
-// EventsScreen.js
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import axios from 'axios';
@@ -46,7 +45,7 @@ export default function EventsScreen() {
   );
 
   if (loading) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
+    return <ActivityIndicator size="large" color="#FF6F00" />;
   }
 
   return (
@@ -84,7 +83,7 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 10,
-    backgroundColor: '#007bff',
+    backgroundColor: '#FF6F00',
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
