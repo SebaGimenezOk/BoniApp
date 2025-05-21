@@ -1,95 +1,94 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
 import axios from 'axios';
-import { Linking } from 'react-native';
+
+const TOKEN = '67PMBUCRLF6POKV7UUCP'; // Reemplaza con tu token
+const ORGANIZATION_ID = '2762861675581'; // Reemplaza con tu organization_id
 
 export default function EventsScreen() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const response = await axios.get(
-          'https://www.eventbriteapi.com/v3/organizations/2762861675581/events/',
-          {
-            headers: {
-              Authorization: 'Bearer 67PMBUCRLF6POKV7UUCP',
-            },
-          }
-        );
-        setEvents(response.data.events);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error al obtener eventos de Eventbrite:", error);
-        setLoading(false);
-      }
-    };
+  const fetchEvents = async () => {
+    try {
+      const response = await axios.get(`https://www.eventbriteapi.com/v3/organizations/${ORGANIZATION_ID}/events/`, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+        params: {
+          status: 'live',
+          expand: 'venue',
+        },
+      });
+      setEvents(response.data.events);
+    } catch (error) {
+      console.error('Error al obtener eventos de Eventbrite:', error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchEvents();
   }, []);
 
-  const renderEvent = ({ item }) => (
-    <View style={styles.eventContainer}>
-      <Text style={styles.eventTitle}>{item.name.text}</Text>
-      <Text>{item.description.text}</Text>
-      <Text>{new Date(item.start.local).toLocaleDateString()}</Text>
-      <TouchableOpacity
-        onPress={() => Linking.openURL(item.url)}
-        style={styles.button}
-      >
-        <Text style={styles.buttonText}>Ver Evento</Text>
-      </TouchableOpacity>
-      {item.logo && <Image source={{ uri: item.logo.url }} style={styles.eventImage} />}
+  const renderItem = ({ item }) => (
+    <View style={styles.card}>
+      <Text style={styles.title}>{item.name.text}</Text>
+      <Text style={styles.date}>{new Date(item.start.local).toLocaleString()}</Text>
+      <Text style={styles.location}>{item.venue?.address?.localized_address_display}</Text>
     </View>
   );
 
   if (loading) {
-    return <ActivityIndicator size="large" color="#FF6F00" />;
+    return (
+      <View style={styles.center}>
+        <ActivityIndicator size="large" color="#ff0055" />
+        <Text style={{ marginTop: 10 }}>Cargando eventos...</Text>
+      </View>
+    );
   }
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={events}
-        renderItem={renderEvent}
-        keyExtractor={(item) => item.id}
-      />
-    </View>
+    <FlatList
+      data={events}
+      keyExtractor={(item) => item.id}
+      renderItem={renderItem}
+      contentContainerStyle={styles.list}
+    />
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  list: {
     padding: 10,
   },
-  eventContainer: {
-    marginBottom: 20,
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    marginBottom: 15,
     padding: 10,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 3,
   },
-  eventTitle: {
+  title: {
     fontSize: 18,
-    fontWeight: 'bold',
-  },
-  eventImage: {
-    width: 100,
-    height: 100,
+    fontWeight: '600',
     marginTop: 10,
-    borderRadius: 8,
   },
-  button: {
-    marginTop: 10,
-    backgroundColor: '#FF6F00',
-    padding: 10,
-    borderRadius: 5,
+  date: {
+    color: '#777',
+    marginTop: 5,
+  },
+  location: {
+    color: '#444',
+    marginTop: 5,
+  },
+  center: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
   },
 });

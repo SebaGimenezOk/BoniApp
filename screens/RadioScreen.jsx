@@ -1,22 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  View, 
-  Text, 
-  Image, 
-  TouchableOpacity, 
-  StyleSheet 
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet
 } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { Audio } from 'expo-av';
 import { AntDesign, Entypo } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import muestrapic from '../assets/2blanco250.png';
+import muestrapic from '../assets/logoblancostreaming.png';
 
 export default function RadioScreen() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(1);
-  const [title, setTitle] = useState(null);
-  const [artist, setArtist] = useState(null);
   const [positionMillis, setPositionMillis] = useState(0);
   const soundRef = useRef(null);
 
@@ -63,13 +61,8 @@ export default function RadioScreen() {
           } else {
             setPositionMillis(status.positionMillis || 0);
 
-            setTitle(status.metadata && status.metadata.title ? status.metadata.title : null);
-            setArtist(status.metadata && status.metadata.artist ? status.metadata.artist : null);
-
             if (status.didJustFinish) {
               setIsPlaying(false);
-              setTitle(null);
-              setArtist(null);
               setPositionMillis(0);
             }
           }
@@ -100,50 +93,67 @@ export default function RadioScreen() {
 
   return (
     <LinearGradient
-    colors={['#0D1F2D', '#1d2e3d', '#0D1F2D']}
+      colors={['#0D1F2D', '#1d2e3d', '#0D1F2D']}
       style={styles.container}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
     >
-      <Image
-        source={muestrapic}
-        style={styles.coverImage}
-        resizeMode="contain"
-      />
-      {/* <Text style={styles.title}>Bonami Radio</Text> */}
-      {/* <Text style={styles.subtitle}> 🎶 En vivo</Text> */}
+      <View style={styles.bloque}>
 
-      {title && <Text style={styles.metadataText}>🎵 {title}</Text>}
-      {artist && <Text style={styles.metadataText}>👤 {artist}</Text>}
-
-      <Text style={styles.timeText}>{formatTime(positionMillis)}</Text>
-
-      <TouchableOpacity onPress={handlePlayPause} style={styles.playPauseBtn}>
-        <View style={styles.playPauseWrapper}>
-          <AntDesign
-            name={isPlaying ? 'pausecircle' : 'play'}
-            size={72}
-            color="#1DB954"
+        {/* 1. LOGO */}
+        <View style={styles.logoContainer}>
+          <Image
+            source={muestrapic}
+            style={styles.coverImage}
+            resizeMode="contain"
           />
         </View>
-      </TouchableOpacity>
 
-      <View style={styles.sliderContainer}>
-        <Entypo name="sound" size={24} color="#1DB954" />
-        <Slider
-          style={styles.slider}
-          minimumValue={0}
-          maximumValue={1}
-          value={volume}
-          onValueChange={handleVolumeChange}
-          minimumTrackTintColor="#1DB954"
-          maximumTrackTintColor="#fff"
-          thumbTintColor="#1DB954"
-        />
-        <Entypo name="sound-mute" size={24} color="#555" />
+        {/* 2. CONTROLES */}
+        <View style={styles.controlsContainer}>
+          <TouchableOpacity>
+            <AntDesign name="stepbackward" size={34} color="#1DB954" />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={handlePlayPause}>
+            <AntDesign
+              name={isPlaying ? 'pausecircle' : 'play'}
+              size={72}
+              color="#1DB954"
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity>
+            <AntDesign name="stepforward" size={34} color="#1DB954" />
+          </TouchableOpacity>
+        </View>
+
+        {/* 3. SLIDER + TIEMPO + VOLUMEN */}
+        <View style={styles.sliderSection}>
+          <Text style={styles.timeText}>
+          ON AIR: {formatTime(positionMillis)}
+          </Text>
+          <View style={styles.sliderContainer}>
+            <Entypo name="sound" size={24} color="#1DB954" />
+            <Slider
+              style={styles.slider}
+              minimumValue={0}
+              maximumValue={1}
+              value={volume}
+              onValueChange={handleVolumeChange}
+              minimumTrackTintColor="#1DB954"
+              maximumTrackTintColor="#fff"
+              thumbTintColor="#1DB954"
+            />
+            <Entypo name="sound-mute" size={24} color="#555" />
+          </View>
+          <Text style={styles.volumeText}>
+            VOLUMEN: {(volume * 100).toFixed(0)}%
+          </Text>
+
+        </View>
+
       </View>
-
-      <Text style={styles.volumeText}>Volumen: {(volume * 100).toFixed(0)}%</Text>
     </LinearGradient>
   );
 }
@@ -151,56 +161,59 @@ export default function RadioScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 24,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  bloque: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    flex: 1,
+  
+  },
+  logoContainer: {
+    marginTop: 40,
+    alignItems: 'center',
   },
   coverImage: {
-    width: 200,
-    height: 200,
+    width: 250,
+    height: 180,
     borderRadius: 20,
-    marginBottom: 6,
- 
   },
-  title: {
-    color: '#fff',
-    fontSize: 28,
-    fontWeight: 'bold',
-  },
-  subtitle: {
-    color: '#aaa',
-    fontSize: 18,
-    marginBottom: 20,
-  },
-  metadataText: {
-    color: '#1DB954',
-    fontSize: 16,
-    marginBottom: 4,
-  },
-  timeText: {
-    color: '#fff',
-    fontSize: 14,
-    marginBottom: 20,
-  },
-  playPauseBtn: {
-    marginBottom: 30,
-  },
-  playPauseWrapper: {
-    justifyContent: 'center',
+  controlsContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    width: '80%',
+    marginRight:15,
+    gap: 20,
+    position: 'relative',
+    top: -20, // sube el bloque 2
+  },
+  sliderSection: {
+    alignItems: 'center',
+    marginBottom: 20,
+    width: '60%',
   },
   sliderContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: 280,
-    marginBottom: 10,
+    width: '100%',
+    marginBottom: 20,
+    marginLeft:15,
   },
   slider: {
     flex: 1,
     marginHorizontal: 10,
+  
+  },
+  timeText: {
+    color: '#fff',
+    fontSize: 14,
+    marginBottom: 10,
   },
   volumeText: {
     color: '#fff',
-    fontSize: 10,
+    fontSize: 12,
   },
 });

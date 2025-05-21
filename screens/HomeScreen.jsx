@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
-import logoBonami from '../assets/2blanco250.png';
+import logoBonami from '../assets/logoblancodisco.png';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -41,9 +41,9 @@ const styles = StyleSheet.create({
     color: 'white', // ✅ para que se vea sobre fondo oscuro
   },
   coverImage: {
-    width: 200,
+    width: 250,
     height: 200,
     borderRadius: 20,
-    marginBottom: 6,
+    marginBottom: 26,
   },
 });

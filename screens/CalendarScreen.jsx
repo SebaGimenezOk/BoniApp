@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Image } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import LogoBona from "../assets/logoblancocalendario.png"
 
 export default function CalendarScreen() {
   return (
@@ -11,7 +12,15 @@ export default function CalendarScreen() {
       style={styles.gradient}
     >
       <SafeAreaView style={styles.safeArea}>
-        <Text style={styles.title}>📅 Eventos Retro</Text>
+        <View style={styles.container}>
+                  <Image
+                    source={LogoBona}
+                    style={styles.coverImage}
+                    resizeMode="contain"
+                  />
+                  <Text style={styles.text}>Próximos Eventos 🎉</Text>
+                </View>
+      
         <View style={styles.calendarContainer}>
           <Calendar
             markedDates={{
@@ -34,6 +43,7 @@ export default function CalendarScreen() {
             }}
           />
         </View>
+            <Text style={styles.title}>📅 Elige el tuyo!</Text>
       </SafeAreaView>
     </LinearGradient>
   );
@@ -50,14 +60,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#FF6F00',
+    fontSize: 20,
+    fontWeight:'thin',
+    color: 'white',
     marginBottom: 20,
     textAlign: 'center',
+    letterSpacing:3,
   },
   calendarContainer: {
     width: '95%',
     alignSelf: 'center',
+    marginBottom:20,
+    
   },
+  coverImage: {
+    width: 250,
+    height: 180,
+    borderRadius: 20,
+  },
+  text: {
+    fontSize: 20,
+    color: 'white',
+    marginLeft:20,
+    marginBottom:30,
+  }
 });

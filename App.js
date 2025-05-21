@@ -7,6 +7,7 @@ import HomeScreen from './screens/HomeScreen';
 import CalendarScreen from './screens/CalendarScreen';
 import EventsScreen from './screens/EventsScreen';
 import RadioScreen from './screens/RadioScreen';
+import RadioVinylScreen from './screens/RadioVinylScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -45,6 +46,8 @@ export default function App() {
         <Tab.Screen name="Calendario" component={CalendarScreen} />
         <Tab.Screen name="Eventos" component={EventsScreen} />
         <Tab.Screen name="Radio" component={RadioScreen} />
+        <Tab.Screen name="Vinyl" component={RadioVinylScreen} />
+        
       </Tab.Navigator>
     </NavigationContainer>
   );

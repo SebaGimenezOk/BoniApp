@@ -1,5 +1,7 @@
 {
-  "nodeModulesPaths": ["."],
+  "nodeModulesPaths": [
+    "."
+  ],
   "expo": {
     "extra": {
       "eas": {
@@ -9,6 +11,9 @@
     "owner": "sebadevok",
     "android": {
       "package": "com.sebadevok.boniapp"
-    }
+    },
+    "plugins": [
+      "expo-audio"
+    ]
   }
 }
